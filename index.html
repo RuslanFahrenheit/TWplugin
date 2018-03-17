@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Examples</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px 10px;
+            border: 1px solid teal;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="user"></div>
+    <div class="user2"></div>
+
+    <div class="project"></div>
+    <div class="project2"></div>
+
+    <script src="js/user.js"></script>
+    <script src="js/projects.js"></script>
+    <script>
+        // User TW
+        //$.fn.userTW.defaults.ajaxAPI.token = 'twp_3qp8KY7j28ChFS9NuawjTXV8187O';
+        $.fn.userTW.defaults.ajaxAPI = {
+            token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+            url: 'https://justcoded.teamwork.com/me.json'
+        };
+
+        $('.user').userTW({
+            template: `
+                <article class="TWuser-details">
+                    <p>User ID: {{id}}</p>
+                    <p><span>User name:</span> {{first-name}} {{last-name}}</p>
+                    <p><span>User email:</span> <a href="mailto:{{user-name}}">{{user-name}}</a></p>
+                    <p><span>Title:</span> {{title}}</p>
+                    <p><span>Phone number</span> <a href="tel:{{phone-number-mobile}}">{{phone-number-mobile}}</a></p>
+                </article>
+            `,
+           ajaxAPI: {
+                method: 'GET',
+                url: 'https://justcoded.teamwork.com/me.json'
+           }
+        });
+        $('.user2').userTW({
+            ajaxAPI: {
+                error: (error) => {
+                    console.log(error + ' 123')
+                }
+            }
+        });
+
+        // Projects TW
+        // $.fn.projectsTW.defaults.ajaxAPI = {
+        //     token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+        //     url: 'https://justcoded.teamwork.com/projects.json'
+        // };
+        $('.project').projectsTW({
+            something: 'Hello, bro',
+            ajaxAPI: {
+                method: 'GET',
+                token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+                //url: 'https://justcoded.teamwork.com/projects.json'
+            },
+            template: `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Project Name</th>
+                            <th>Status</th>
+                            <th>Created on</th>
+                            <th>Last Changed on</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{id}}</td>
+                            <td>{{name}}</td>
+                            <td>{{status}}</td>
+                            <td>{{created-on}}</td>
+                            <td>{{last-changed-on}}</td>
+                            <td>{{description}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `,
+        });
+        $('.project2').projectsTW({
+            template: `
+                <p class="paragraph">{{id}}</p>
+            `,
+            ajaxAPI: {
+                url: 'https://justcoded.teamwork.com/projects.json',
+                token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O'
+            }
+        });
+    </script>
+</body>
+</html>
