@@ -27,13 +27,11 @@
         return template;
     };
 
-    function requiredOptionsException(obj) {
-        for (let key in obj) {
-            if (typeof obj[key] === 'object') {
-                requiredOptionsException(obj[key]);
-            } else if (obj[key] === 'undefined') {
-                throw new Error(`${key} is required.`);
-            }
+    function requiredOptionsException(config) {
+        if (config.ajaxAPI.url === undefined) {
+            throw new Error(`Url is required.`);
+        } else if (config.ajaxAPI.token === undefined) {
+            throw new Error(`Token is required.`);
         }
     }
 
@@ -53,12 +51,12 @@
 
     $.fn.projectsTW.defaults = {
         template: `
-            <p>{{id}} {{name}} {{status}} {{created-on}} {last-changed-on}} {{description}}</p>
+            <p>{{id}} {{name}} {{status}} {{created-on}} {{last-changed-on}} {{description}}</p>
         `,
         ajaxAPI: {
             method: 'GET',
-            url: 'undefined',
-            token: 'undefined',
+            url: '',
+            token: '',
             error: (error)=> {
                 console.log(`Rejected: ${error}`);
             }
