@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Time example</title>
+</head>
+<body>
+    <div id="chart_div"></div>
+    <div class="time"></div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script src="js/plugins/mustache.min.js"></script>
+    <script src="js/time.js"></script>
+
+    <script>
+        $.fn.timeTW.defaults.ajaxAPI = {
+            token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+            url: 'https://justcoded.teamwork.com/people/172758/loggedtime.json'
+        };
+        $('.time').timeTW({
+            template: `
+                {{#billable}}
+                {{1}}
+                {{/billable}}
+            `
+        });
+    </script>
+</body>
+</html>

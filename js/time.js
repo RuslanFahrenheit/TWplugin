@@ -18,12 +18,8 @@
     };
 
     const processTemplate = (template, data) => {
-        const templateVariableRegExp = /{{(.*?)}}/i;
-        let result;
-
-        while (result = templateVariableRegExp.exec(template)) {
-            template = template.replace(result[0], data[result[1]]);
-        }
+        template = Mustache.render(template, data);
+        console.log(template);
         return template;
     };
 
