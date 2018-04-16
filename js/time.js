@@ -17,12 +17,6 @@
         });
     };
 
-    const processTemplate = (template, data) => {
-        template = Mustache.render(template, data);
-        console.log(template);
-        return template;
-    };
-
     function requiredOptionsException(obj) {
         for (let key in obj) {
             if (typeof obj[key] === 'object') {
@@ -41,7 +35,7 @@
         return this.each(() => {
             getTWInfo(config.ajaxAPI.url, config)
                 .then(
-                    data => this.wrapInner(processTemplate(config.template, data['user'])),
+                    data => this.wrapInner(config.templater(config.template, data['user'])),
                     error => console.log(`Error: ${error}`)
                 );
         });
@@ -58,6 +52,15 @@
             error: (error)=> {
                 console.log(`Rejected: ${error}`);
             }
+        },
+        templater: (template, data) => {
+            const templateVariableRegExp = /{{(.*?)}}/i;
+            let result;
+
+            while (result = templateVariableRegExp.exec(template)) {
+                template = template.replace(result[0], data[result[1]]);
+            }
+            return template;
         }
     }
 })(jQuery);

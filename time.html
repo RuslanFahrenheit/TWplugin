@@ -10,7 +10,6 @@
     <div id="chart_div"></div>
     <div class="time"></div>
 
-
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
     <script src="js/plugins/mustache.min.js"></script>
@@ -18,7 +17,7 @@
 
     <script>
         $.fn.timeTW.defaults.ajaxAPI = {
-            token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+            token: 'your_token_here',
             url: 'https://justcoded.teamwork.com/people/172758/loggedtime.json'
         };
         $('.time').timeTW({
@@ -26,7 +25,11 @@
                 {{#billable}}
                 {{1}}
                 {{/billable}}
-            `
+            `,
+            templater: (template, data) => {
+                template = Mustache.render(template, data);
+                return template;
+            }
         });
     </script>
 </body>
