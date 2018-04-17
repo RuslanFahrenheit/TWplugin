@@ -9,6 +9,7 @@
 <body>
     <div id="chart_div"></div>
     <div class="time"></div>
+    <canvas id="myChart"></canvas>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
@@ -22,9 +23,11 @@
         };
         $('.time').timeTW({
             template: `
+            <ul>
                 {{#billable}}
-                {{1}}
+                <li>{{1}}</li>
                 {{/billable}}
+            </ul>
             `,
             templater: (template, data) => {
                 template = Mustache.render(template, data);

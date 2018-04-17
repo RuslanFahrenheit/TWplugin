@@ -17,6 +17,16 @@
         });
     };
 
+    const processTemplate = (template, data) => {
+        const templateVariableRegExp = /{{(.*?)}}/i;
+        let result;
+
+        while (result = templateVariableRegExp.exec(template)) {
+            template = template.replace(result[0], data[result[1]]);
+        }
+        return template;
+    }
+
     function requiredOptionsException(obj) {
         for (let key in obj) {
             if (typeof obj[key] === 'object') {
@@ -54,13 +64,7 @@
             }
         },
         templater: (template, data) => {
-            const templateVariableRegExp = /{{(.*?)}}/i;
-            let result;
-
-            while (result = templateVariableRegExp.exec(template)) {
-                template = template.replace(result[0], data[result[1]]);
-            }
-            return template;
+            processTemplate(template, data);
         }
     }
 })(jQuery);
