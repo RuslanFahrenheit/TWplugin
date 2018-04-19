@@ -9,7 +9,7 @@
 <body>
     <div id="chart_div"></div>
     <div class="time"></div>
-    <canvas id="myChart"></canvas>
+    <!--<canvas id="myChart"></canvas>-->
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
@@ -22,66 +22,62 @@
             token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
             url: 'https://justcoded.teamwork.com/people/172758/loggedtime.json'
         };
+
+
         $('.time').timeTW({
             template: `
-            <ul>
-                {{#billable}}
-                <li data-value="{{1}}">{{1}}</li>
-                {{/billable}}
-            </ul>
+                <input type="hidden" value="{{#billable}}{{1}} {{/billable}}">
+                <canvas id="myChart"></canvas>
             `,
             templater: (template, data) => {
                 template = Mustache.render(template, data);
                 return template;
+            },
+            callback: () => {
+                let a = $('input').attr('value');
+                console.log(a)
+                let b = a.split(' ');
+                console.log(b);
+
+                let ctx = document.getElementById("myChart").getContext('2d');
+                let myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: b,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
             }
         });
-
-        setTimeout(function() {
-            let array = [];
-            $('li').each(function() {
-                let el = $(this).attr('data-value');
-                array.push(el);
-            });
-            console.log(array);
-
-            var ctx = document.getElementById("myChart").getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: array,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }]
-                    }
-                }
-            });
-        },500)
     </script>
 </body>
 </html>
