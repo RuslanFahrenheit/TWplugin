@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Example</title>
+
+    <style>
+        .TWuser-details {
+            overflow: hidden;
+        }
+
+        .TWuser-details__avatar {
+            float: left;
+            margin-right: 25px;
+        }
+
+        .TWuser-details__general {
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="user"></div>
+<div class="time"></div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+<script src="js/plugins/mustache.min.js"></script>
+<script src="js/user.js"></script>
+<script src="js/time.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script>
+    $.fn.userTW.defaults.ajaxAPI = {
+        token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+        url: 'https://justcoded.teamwork.com/me.json'
+    };
+
+    $('.user').userTW({
+        template: `
+                <article class="TWuser-details">
+                    <div class="TWuser-details__avatar"><img src="{{avatar-url}}" alt="user photo"></div>
+                    <div class="TWuser-details__general">
+                        <p>User ID: {{id}}</p>
+                        <p><span>User name:</span> {{first-name}} {{last-name}}</p>
+                        <p><span>Title:</span> {{title}}</p>
+                        <p><span>User email:</span> <a href="mailto:{{user-name}}">{{user-name}}</a></p>
+                        <p><span>Phone number</span> <a href="tel:{{phone-number-mobile}}">{{phone-number-mobile}}</a></p>
+                    </div>
+                </article>
+            `,
+        ajaxAPI: {
+            method: 'GET',
+            url: 'https://justcoded.teamwork.com/me.json'
+        }
+    });
+
+    $.fn.timeTW.defaults.ajaxAPI = {
+        token: 'twp_3qp8KY7j28ChFS9NuawjTXV8187O',
+        url: 'https://justcoded.teamwork.com/people/172758/loggedtime.json'
+    };
+
+    $('.time').timeTW({
+        template: `
+            <canvas
+                id="myChart"
+                data-values="{{#billable}}{{1}} {{/billable}}"
+                data-dates="{{#billable}}{{0}} {{/billable}}">
+            </canvas>
+        `,
+        renderTemplate: (template, data) => {
+            return Mustache.render(template, data);
+        },
+        afterRenderCb: () => {
+            initChart();
+        }
+    });
+
+    function initChart() {
+        let values = $('#myChart').data('values').split(' '),
+            datesMs = $('#myChart').data('dates').split(' '),
+            dayLabels = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fri', 'Sat'];
+            daysValues = datesMs.map((e) => {
+            const date = parseInt(e),
+                dateFormat = new Date(date),
+                day = dateFormat.getDay();
+
+            return dayLabels[day];
+        });
+
+
+        let ctx = document.getElementById("myChart").getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: daysValues,
+                datasets: [{
+                    label: 'billing time',
+                    data: values,
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
